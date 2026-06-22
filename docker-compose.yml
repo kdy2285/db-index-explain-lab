@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: index-lab-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: index_lab
+      MYSQL_USER: index_user
+      MYSQL_PASSWORD: index_pass
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+    volumes:
+      - index_lab_mysql_data:/var/lib/mysql
+
+volumes:
+  index_lab_mysql_data:
