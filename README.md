@@ -29,6 +29,66 @@ Full Scan, Index Scan, Sort, filesort,
 * Gradle
 * Lombok
 
+## 실행 및 실험 방법
+
+### 1. MySQL 실행
+
+```bash
+docker compose up -d
+```
+
+MySQL 컨테이너 상태 확인:
+
+```bash
+docker compose ps
+```
+
+### 2. 애플리케이션 실행
+
+```bash
+git clone https://github.com/kdy2285/db-index-explain-lab.git
+cd db-index-explain-lab
+./gradlew bootRun
+```
+
+Windows 환경:
+
+```bash
+gradlew.bat bootRun
+```
+
+애플리케이션 실행 시 실험용 상품 데이터
+100,000건을 생성합니다.
+
+### 3. 실행계획 확인
+
+MySQL 또는 DBeaver에서 README의 실험 쿼리를 실행합니다.
+
+```sql
+EXPLAIN ANALYZE
+SELECT *
+FROM products
+WHERE category = 'ELECTRONICS'
+ORDER BY created_at DESC
+LIMIT 20;
+```
+
+다음 순서로 실행계획을 비교합니다.
+
+1. 보조 인덱스가 없는 상태
+2. category 단일 인덱스
+3. category, created_at 복합 인덱스
+4. 복합 인덱스 컬럼 순서 변경
+5. LIKE, 범위 조건, 낮은 카디널리티 조건
+
+비교 항목:
+
+* access type
+* 사용된 index
+* 예상 및 실제 조회 rows
+* filesort 발생 여부
+* 실행 시간
+
 ## 3. 도메인 설계
 
 상품 검색 도메인을 사용했습니다.
